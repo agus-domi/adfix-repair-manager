@@ -1,2 +1,11 @@
-# adfix-repair-manager
-Sistema de gestión de reparaciones desarrollado en Laravel para talleres técnicos. Permite administrar trabajos, clientes, gastos, cobros y ganancias con resumen mensual.
+# ADFix Repair Manager
+
+Sistema web para la gestión de reparaciones de celulares.
+
+Desarrollado con Laravel, pensado para uso interno de ADFix:
+- Control de trabajos
+- Estados de reparación
+- Clientes y ganancias
+- Resúmenes mensuales
+
+Proyecto personal para aprendizaje y uso real.
