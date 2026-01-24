@@ -7,7 +7,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SummaryController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('repairs.index');
 });
 
 Route::resource('clients', ClientController::class);
