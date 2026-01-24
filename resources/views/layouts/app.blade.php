@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>ADFix - Gestión</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-100">
 
     <nav class="bg-black text-white p-4 mb-6">
@@ -13,6 +15,14 @@
 
             <a href="{{ route('repairs.index') }}" class="underline">
                 Trabajos
+            </a>
+
+            <a href="{{ route('clients.index') }}" class="underline">
+                Clientes
+            </a>
+
+            <a href="{{ route('expenses.index') }}" class="underline">
+                Gastos
             </a>
 
             <a href="{{ route('summary.index') }}" class="underline">
@@ -27,4 +37,5 @@
     </main>
 
 </body>
+
 </html>

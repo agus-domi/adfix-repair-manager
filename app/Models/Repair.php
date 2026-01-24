@@ -36,6 +36,6 @@ class Repair extends Model
     public function getProfitAttribute()
     {
         $expenses = $this->expenses->sum('amount');
-        return ($this->paid_amount ?? 0) - $expenses;
+        return ($this->charged_amount ?? 0) - $expenses;
     }
 }

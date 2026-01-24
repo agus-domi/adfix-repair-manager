@@ -10,9 +10,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::resource('clients', ClientController::class);
 Route::resource('repairs', RepairController::class);
 Route::post('/repairs/{repair}/expenses', [ExpenseController::class, 'store'])
     ->name('expenses.store');
+
+// Gastos Generales
+Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
+Route::get('/expenses/create', [ExpenseController::class, 'create'])->name('expenses.create');
+Route::post('/expenses', [ExpenseController::class, 'storeGeneral'])->name('expenses.storeGeneral');
+Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
+
 Route::get('/summary', [SummaryController::class, 'index'])
     ->name('summary.index');
 Route::patch('/repairs/{repair}/status', [RepairController::class, 'updateStatus'])

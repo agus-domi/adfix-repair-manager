@@ -35,32 +35,32 @@ class RepairController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'client_id'        => 'nullable|exists:clients,id',
-            'client_name'      => 'required_without:client_id|string|max:255',
-            'client_phone'     => 'required_without:client_id|string|max:50',
-            'device'           => 'required|string|max:255',
-            'issue'            => 'required|string',
-            'estimated_price'  => 'required|numeric|min:0',
-            'status'           => 'required|in:pendiente,en_proceso,completado',
-            'received_at'      => 'required|date',
+            'client_id' => 'nullable|exists:clients,id',
+            'client_name' => 'nullable|required_without:client_id|string|max:255',
+            'client_phone' => 'nullable|required_without:client_id|string|max:50',
+            'device' => 'required|string|max:255',
+            'issue' => 'required|string',
+            'estimated_price' => 'required|numeric|min:0',
+            'status' => 'required|in:pendiente,en_proceso,completado',
+            'received_at' => 'required|date',
         ]);
 
         // Si no eligió cliente existente, lo crea
         if (empty($data['client_id'])) {
             $client = Client::create([
-                'name'  => $data['client_name'],
+                'name' => $data['client_name'],
                 'phone' => $data['client_phone'],
             ]);
             $data['client_id'] = $client->id;
         }
 
         Repair::create([
-            'client_id'       => $data['client_id'],
-            'device'          => $data['device'],
-            'issue'           => $data['issue'],
+            'client_id' => $data['client_id'],
+            'device' => $data['device'],
+            'issue' => $data['issue'],
             'estimated_price' => $data['estimated_price'],
-            'status'          => $data['status'],
-            'received_at'     => $data['received_at'],
+            'status' => $data['status'],
+            'received_at' => $data['received_at'],
         ]);
 
         return redirect()->route('repairs.index');
@@ -102,12 +102,13 @@ class RepairController extends Controller
     public function storeCharge(Request $request, Repair $repair)
     {
         $request->validate([
-            'paid_amount' => 'required|numeric|min:0',
+            'charged_amount' => 'required|numeric|min:0',
         ]);
 
         $repair->update([
-            'paid_amount' => $request->paid_amount,
+            'charged_amount' => $request->charged_amount,
             'status' => 'completado',
+            'delivered_at' => now(),
         ]);
 
         return redirect()->route('repairs.index');
@@ -117,24 +118,39 @@ class RepairController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Repair $repair)
     {
-        //
+        $clients = Client::orderBy('name')->get();
+        return view('repairs.edit', compact('repair', 'clients'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Repair $repair)
     {
-        //
+        $data = $request->validate([
+            'client_id' => 'required|exists:clients,id',
+            'device' => 'required|string|max:255',
+            'issue' => 'required|string',
+            'estimated_price' => 'required|numeric|min:0',
+            'charged_amount' => 'nullable|numeric|min:0',
+            'status' => 'required|in:pendiente,en_proceso,completado',
+            'received_at' => 'required|date',
+            'delivered_at' => 'nullable|date',
+        ]);
+
+        $repair->update($data);
+
+        return redirect()->route('repairs.index')->with('success', 'Reparación actualizada.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Repair $repair)
     {
-        //
+        $repair->delete();
+        return redirect()->route('repairs.index')->with('success', 'Reparación eliminada.');
     }
 }
