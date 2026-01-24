@@ -1,41 +1,40 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="UTF-8">
-    <title>ADFix - Gestión</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-gray-100">
+<body class="font-sans antialiased">
+    <div class="min-h-screen bg-gray-100">
+        @include('layouts.navigation')
 
-    <nav class="bg-black text-white p-4 mb-6">
-        <div class="max-w-6xl mx-auto flex gap-6">
-            <span class="font-bold">ADFix</span>
+        <!-- Page Heading -->
+        @isset($header)
+            <header class="bg-white shadow">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
+                </div>
+            </header>
+        @endisset
 
-            <a href="{{ route('repairs.index') }}" class="underline">
-                Trabajos
-            </a>
-
-            <a href="{{ route('clients.index') }}" class="underline">
-                Clientes
-            </a>
-
-            <a href="{{ route('expenses.index') }}" class="underline">
-                Gastos
-            </a>
-
-            <a href="{{ route('summary.index') }}" class="underline">
-                Resumen
-            </a>
-        </div>
-    </nav>
-
-
-    <main class="px-4">
-        @yield('content')
-    </main>
-
+        <!-- Page Content -->
+        <main>
+            {{ $slot ?? '' }}
+            @yield('content')
+        </main>
+    </div>
 </body>
 
 </html>
