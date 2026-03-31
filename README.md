@@ -5,9 +5,9 @@
 
 **ADFix Repair Manager** es una solución web integral diseñada para optimizar la gestión de servicios técnicos de telefonía móvil. Este sistema permite centralizar el control de reparaciones, clientes y finanzas en una interfaz intuitiva y eficiente.
 
-🚀 **Prueba la Demo:** [ADFix en Railway](https://adfix-repair-manager.up.railway.app/)
-- **Usuario:** `admin@adfix.com`
-- **Contraseña:** `admin123`
+🚀 **Prueba la Demo:** [ADFix](https://adfix-repair-manager.onrender.com)
+- **Usuario:** `test@example.com`
+- **Contraseña:** `password`
 
 ---
 
