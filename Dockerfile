@@ -23,7 +23,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # 7. Instalar dependencias de PHP y optimizar para producción
-RUN composer install --no-interaction --no-dev --optimize-autoloader
+RUN composer install --no-interaction --optimize-autoloader
 
 # 8. Instalar dependencias de JavaScript y compilar CSS/Vite/Tailwind
 RUN npm install && npm run build
