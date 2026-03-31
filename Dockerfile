@@ -28,8 +28,9 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 # 8. Instalar dependencias de JavaScript y compilar CSS/Vite/Tailwind
 RUN npm install && npm run build
 
-# 9. Preparar SQLite y dar permisos de escritura a las carpetas críticas
-RUN touch database/database.sqlite \
+# 9. Crear carpetas de caché requeridas por Laravel y establecer permisos
+RUN mkdir -p storage/framework/views storage/framework/cache/data storage/framework/sessions storage/logs bootstrap/cache \
+    && touch database/database.sqlite \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 777 storage bootstrap/cache database
 
