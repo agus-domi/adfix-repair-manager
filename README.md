@@ -24,7 +24,7 @@
 
 - **Backend:** [Laravel 10+](https://laravel.com/)
 - **Frontend:** Blade Templates & [Tailwind CSS](https://tailwindcss.com/)
-- **Base de Datos:** SQLite
+- **Base de Datos:** Mysql
 - **Testing:** PHPUnit
 
 ## 👨‍💻 Sobre el Proyecto
