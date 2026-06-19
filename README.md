@@ -20,6 +20,44 @@
 - **Dashboard Estadístico:** Resúmenes mensuales automáticos para la toma de decisiones basada en datos.
 - **Diseño Responsive:** Acceso desde cualquier dispositivo gracias a Tailwind CSS.
 
+---
+
+## 📷 Vista Previa de la Aplicación
+
+<details>
+  <summary>📊 Ver Dashboard Principal</summary>
+  <br>
+  <p align="center">
+    <img width="1920" height="1048" alt="image" src="https://github.com/user-attachments/assets/c214f103-d31b-489a-b033-f0f2f744a3aa" alt="Dashboard ADFix" width="100%">
+  </p>
+</details>
+
+<details>
+  <summary>🔧 Ver Módulo de Clientes</summary>
+  <br>
+  <p align="center">
+    <img width="1920" height="1048" alt="image" src="https://github.com/user-attachments/assets/bf826633-c037-46e3-bc31-ab9ccc61255f" alt="Clientes ADFix" width="100%">
+  </p>
+</details>
+
+<details>
+  <summary>💵 Ver Módulo Gastos</summary>
+  <br>
+  <p align="center">
+    <img width="1920" height="1048" alt="image" src="https://github.com/user-attachments/assets/777950da-5e4c-41dc-8d2c-6d4489ef639d" alt="Gastos ADFix" width="100%">
+  </p>
+</details>
+
+<details>
+  <summary>💰 Ver Módulo Financiero</summary>
+  <br>
+  <p align="center">
+    <img width="1920" height="1048" alt="image" src="https://github.com/user-attachments/assets/b8b7224e-98c4-4255-9565-aa2141505972" alt="Finanzas ADFix" width="100%">
+  </p>
+</details>
+
+---
+
 ## 🛠️ Stack Tecnológico
 
 - **Backend:** [Laravel 10+](https://laravel.com/)
