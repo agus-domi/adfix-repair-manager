@@ -2,65 +2,70 @@
 
 @section('content')
     <div class="max-w-4xl mx-auto">
-        <div class="mb-6 flex justify-between items-center">
+        <div class="mb-6 flex flex-wrap justify-between items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold">{{ $client->name }}</h1>
-                <p class="text-gray-600">{{ $client->phone ?? 'Sin teléfono registrado' }}</p>
+                <h1 class="text-2xl font-bold text-slate-800">{{ $client->name }}</h1>
+                <p class="text-slate-500 text-sm mt-0.5">{{ $client->phone ?? 'Sin teléfono registrado' }}</p>
             </div>
-            <div class="space-x-2">
-                <a href="{{ route('clients.edit', $client) }}"
-                    class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
-                    Editar Cliente
-                </a>
+            <div class="flex gap-2">
                 <a href="{{ route('clients.index') }}"
-                    class="text-gray-600 border border-gray-300 px-4 py-2 rounded hover:bg-gray-50">
+                    class="text-slate-600 border border-slate-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-50 transition">
                     Volver
+                </a>
+                <a href="{{ route('clients.edit', $client) }}"
+                    class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition">
+                    Editar Cliente
                 </a>
             </div>
         </div>
 
-        <div class="bg-white rounded shadow p-6">
-            <h2 class="text-xl font-bold mb-4">Historial de Reparaciones ({{ $client->repairs->count() }})</h2>
-            <table class="w-full text-left">
+        <div class="bg-white border border-slate-200 shadow-sm rounded-xl overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-200">
+                <h2 class="text-lg font-bold text-slate-800">Historial de Reparaciones ({{ $client->repairs->count() }})</h2>
+            </div>
+            <table class="w-full text-left text-sm">
                 <thead>
-                    <tr class="border-b">
-                        <th class="pb-2">Fecha</th>
-                        <th class="pb-2">Equipo</th>
-                        <th class="pb-2">Problema</th>
-                        <th class="pb-2">Estado</th>
-                        <th class="pb-2 text-right">Monto</th>
-                        <th class="pb-2 text-right"></th>
+                    <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wide">
+                        <th class="px-4 py-3 font-semibold">Fecha</th>
+                        <th class="px-4 py-3 font-semibold">Equipo</th>
+                        <th class="px-4 py-3 font-semibold">Problema</th>
+                        <th class="px-4 py-3 font-semibold">Estado</th>
+                        <th class="px-4 py-3 font-semibold text-right">Monto</th>
+                        <th class="px-4 py-3 font-semibold text-right"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-slate-100">
                     @forelse($client->repairs as $repair)
-                        <tr class="border-b last:border-0 hover:bg-gray-50">
-                            <td class="py-3 text-sm">{{ $repair->received_at->format('d/m/Y') }}</td>
-                            <td class="py-3 font-medium">{{ $repair->device }}</td>
-                            <td class="py-3 text-sm text-gray-600">{{ Str::limit($repair->issue, 30) }}</td>
-                            <td class="py-3">
-                                <span class="px-2 py-1 rounded text-xs
-                                    @if($repair->status == 'pendiente') bg-red-100 text-red-800
-                                    @elseif($repair->status == 'en_proceso') bg-blue-100 text-blue-800
-                                    @elseif($repair->status == 'completado') bg-green-100 text-green-800
-                                    @endif">
-                                    {{ ucfirst(str_replace('_', ' ', $repair->status)) }}
+                        @php
+                            $statusClasses = match ($repair->status) {
+                                \App\Enums\RepairStatus::PENDIENTE => 'bg-slate-100 text-slate-600',
+                                \App\Enums\RepairStatus::EN_PROCESO => 'bg-amber-100 text-amber-700',
+                                \App\Enums\RepairStatus::COMPLETADO => 'bg-emerald-100 text-emerald-700',
+                            };
+                        @endphp
+                        <tr class="hover:bg-slate-50/70 transition">
+                            <td class="px-4 py-3 text-slate-500 whitespace-nowrap">{{ $repair->received_at->format('d/m/Y') }}</td>
+                            <td class="px-4 py-3 font-medium text-slate-800">{{ $repair->device }}</td>
+                            <td class="px-4 py-3 text-slate-500">{{ Str::limit($repair->issue, 30) }}</td>
+                            <td class="px-4 py-3">
+                                <span class="px-2.5 py-1 rounded-full text-xs font-medium {{ $statusClasses }}">
+                                    {{ $repair->status->label() }}
                                 </span>
                             </td>
-                            <td class="py-3 text-right">
+                            <td class="px-4 py-3 text-right whitespace-nowrap">
                                 @if($repair->charged_amount)
                                     ${{ number_format($repair->charged_amount, 2) }}
                                 @else
-                                    <span class="text-gray-400">-</span>
+                                    <span class="text-slate-300">-</span>
                                 @endif
                             </td>
-                            <td class="py-3 text-right">
-                                <a href="{{ route('repairs.show', $repair) }}" class="text-blue-600 hover:underline">Ver</a>
+                            <td class="px-4 py-3 text-right whitespace-nowrap">
+                                <a href="{{ route('repairs.show', $repair) }}" class="text-indigo-600 hover:text-indigo-800 font-medium">Ver</a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-6 text-center text-gray-500">
+                            <td colspan="6" class="px-4 py-12 text-center text-slate-400">
                                 Este cliente no tiene reparaciones registradas.
                             </td>
                         </tr>

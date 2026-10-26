@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\RepairStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Repair extends Model
 {
@@ -20,22 +23,22 @@ class Repair extends Model
     protected $casts = [
         'received_at' => 'date',
         'delivered_at' => 'date',
+        'status' => RepairStatus::class,
     ];
 
-    public function client()
+    public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
     }
 
-    public function expenses()
+    public function expenses(): HasMany
     {
         return $this->hasMany(Expense::class);
     }
 
-    // Ganancia calculada
-    public function getProfitAttribute()
+    public function getProfitAttribute(): float
     {
-        $expenses = $this->expenses->sum('amount');
+        $expenses = $this->getAttribute('expenses_sum_amount') ?? $this->expenses->sum('amount');
         return ($this->charged_amount ?? 0) - $expenses;
     }
 }

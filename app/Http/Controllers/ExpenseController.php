@@ -11,7 +11,7 @@ class ExpenseController extends Controller
     public function index()
     {
         // Gastos generales (no vinculados a reparaciones)
-        $expenses = Expense::whereNull('repair_id')->orderBy('created_at', 'desc')->get();
+        $expenses = Expense::whereNull('repair_id')->orderBy('created_at', 'desc')->paginate(15);
         return view('expenses.index', compact('expenses'));
     }
 

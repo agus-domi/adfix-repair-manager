@@ -9,7 +9,7 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Client::orderBy('name')->withCount('repairs')->get();
+        $clients = Client::orderBy('name')->withCount('repairs')->paginate(15);
         return view('clients.index', compact('clients'));
     }
 
@@ -22,7 +22,7 @@ class ClientController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:50',
+            'phone' => 'nullable|string|max:50|unique:clients,phone',
         ]);
 
         Client::create($data);
@@ -50,7 +50,7 @@ class ClientController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:50',
+            'phone' => 'nullable|string|max:50|unique:clients,phone,' . $client->id,
         ]);
 
         $client->update($data);

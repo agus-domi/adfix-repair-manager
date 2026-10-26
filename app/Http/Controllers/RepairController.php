@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Repair;
 use App\Models\Client;
+use App\Enums\RepairStatus;
+use Illuminate\Validation\Rules\Enum;
 
 class RepairController extends Controller
 {
@@ -14,8 +16,9 @@ class RepairController extends Controller
     public function index()
     {
         $repairs = Repair::with('client')
+            ->withSum('expenses', 'amount')
             ->orderBy('received_at', 'desc')
-            ->get();
+            ->paginate(15);
 
         return view('repairs.index', compact('repairs'));
     }
@@ -41,7 +44,7 @@ class RepairController extends Controller
             'device' => 'required|string|max:255',
             'issue' => 'required|string',
             'estimated_price' => 'required|numeric|min:0',
-            'status' => 'required|in:pendiente,en_proceso,completado',
+            'status' => ['required', new Enum(RepairStatus::class)],
             'received_at' => 'required|date',
         ]);
 
@@ -71,7 +74,8 @@ class RepairController extends Controller
      */
     public function show(Repair $repair)
     {
-        $repair->load('client');
+        $repair->load(['client', 'expenses']);
+        $repair->loadSum('expenses', 'amount');
 
         return view('repairs.show', compact('repair'));
     }
@@ -79,10 +83,10 @@ class RepairController extends Controller
     public function updateStatus(Request $request, Repair $repair)
     {
         $request->validate([
-            'status' => 'required|in:pendiente,en_proceso,completado',
+            'status' => ['required', new Enum(RepairStatus::class)],
         ]);
 
-        if ($request->status === 'completado') {
+        if ($request->status === RepairStatus::COMPLETADO->value) {
             return redirect()->route('repairs.charge', $repair);
         }
 
@@ -107,7 +111,7 @@ class RepairController extends Controller
 
         $repair->update([
             'charged_amount' => $request->charged_amount,
-            'status' => 'completado',
+            'status' => RepairStatus::COMPLETADO->value,
             'delivered_at' => now(),
         ]);
 
@@ -120,6 +124,7 @@ class RepairController extends Controller
      */
     public function edit(Repair $repair)
     {
+        $repair->loadSum('expenses', 'amount');
         $clients = Client::orderBy('name')->get();
         return view('repairs.edit', compact('repair', 'clients'));
     }
@@ -135,7 +140,7 @@ class RepairController extends Controller
             'issue' => 'required|string',
             'estimated_price' => 'required|numeric|min:0',
             'charged_amount' => 'nullable|numeric|min:0',
-            'status' => 'required|in:pendiente,en_proceso,completado',
+            'status' => ['required', new Enum(RepairStatus::class)],
             'received_at' => 'required|date',
             'delivered_at' => 'nullable|date',
         ]);
